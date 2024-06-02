@@ -15,5 +15,4 @@ Description:
 1. Test the preview deployment on the new/updated functionality
 </details>
 
-<details>
 

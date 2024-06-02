@@ -1,7 +1,8 @@
 //File contains template POST and GET handlers.
+import { NextResponse } from "next/server";
+
 import { Store } from "@/resources/db/models/store"
 import  {connectDB}  from "@/resources/db/mongodb"
-import { NextResponse } from "next/server";
 
 
 export async function GET(

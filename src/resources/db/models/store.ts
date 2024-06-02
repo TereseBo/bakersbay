@@ -1,5 +1,5 @@
 //Contains the model and interface to represent a store
-import { Schema, model, models } from 'mongoose';
+import { model, models,Schema } from 'mongoose';
 
 // 1. Create an interface representing a document in MongoDB.
 interface StoreInterface {
