@@ -13,7 +13,7 @@ if (!DATABASE_URL) {
 let cached = global.mongoose;
 
 if (!cached) {
-  cached = global.mongoose = { conn: null, promise: null, models: { Store: null } };
+  cached = global.mongoose = { conn: null, promise: null, models: { Store: null, User: null } };
 }
 
 async function connectDB() {
