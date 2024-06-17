@@ -1,9 +1,6 @@
-import credentials from "next-auth/providers/credentials"
+import { saveNewUser } from "@/resources/auth/utils"
 
-import { signIn } from "@/auth"
-
-
-export function SignInForm() {
+export function RegisterUserForm() {
 
 
 
@@ -11,8 +8,11 @@ export function SignInForm() {
     <form
       action={async (formData) => {
         "use server"
-        console.log(credentials)
-        await signIn("credentials", formData)
+        console.log('formData in form')
+        console.log(formData)
+        const data = Object.fromEntries(formData)
+        await saveNewUser(data)
+
       }}
     >
       <label>

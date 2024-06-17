@@ -2,7 +2,7 @@ import NextAuth from "next-auth"
 import Credentials from "next-auth/providers/credentials"
 import { ZodError } from "zod"
 
-import { getUserFromDb, saltAndHashPassword } from "@/resources/auth/utils"
+import { authenticateUser } from "@/resources/auth/utils"
 import { signInSchema } from "@/resources/validation/signinschema"
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -16,27 +16,27 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       authorize: async (credentials) => {
         console.log('credentials inaurh')
         console.log(credentials)
-        let user = null
+
 
         const { email, password } = await signInSchema.parseAsync(credentials)
-        console.log('email, pass after await signin schema')
- console.log(email, password)
-        // logic to salt and hash password
-        const pwHash = saltAndHashPassword(credentials.password as string)
-        console.log('pwhash from hash func')
- console.log(pwHash)
         // logic to verify if user exists
-        user = await getUserFromDb(credentials.email as string, pwHash)
-        console.log('db response from get user')
+        console.log('email, pass after await signin schema')
+        console.log(email, password)
+        const user = await authenticateUser(email, password)
+        console.log('after authenticate')
         console.log(user)
+
+
         if (!user) {
           // No user found, so this is their first attempt to login
           // meaning this is also the place you could do registration
+          console.log('no user was found')
           throw new Error("User not found.")
+        } else {
+          console.log('a user was found')
+          // return user object with the their profile data
+          return user
         }
- 
-        // return user object with the their profile data
-        return user
       },
     }),
   ],
