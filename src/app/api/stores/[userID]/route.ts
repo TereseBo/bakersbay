@@ -2,42 +2,48 @@
 import { NextResponse } from "next/server";
 
 import { Store } from "@/resources/db/models/store"
-import  {connectDB}  from "@/resources/db/mongodb"
+import { connectDB } from "@/resources/db/mongodb"
 
 
 export async function GET(
     req: Request,
     { params }: { params: { userID: string } }
-  ) {
+) {
     try {
-  
-      return NextResponse.json("Reached the api/storeID folder");
+        const { userID } = params
+        console.log(userID)
+        await connectDB()
+        const dbRes = await Store.find({ owner: userID },{}).exec()
+        console.log(dbRes)
+        return NextResponse.json(dbRes);
     } catch (error) {
-      console.log("api/GET", error);
-      return new NextResponse(
-        "Ooops, something went wrong when getting the stores",
-        { status: 500 }
-      );
+        console.log("api/GET", error);
+        return new NextResponse(
+            "Ooops, something went wrong when getting the stores",
+            { status: 500 }
+        );
     }
-  }
+}
 
 export async function POST(
     req: Request,
-    { params }: { params: { storeID: string } }
+    { params }: { params: { userID: string } }
 ) {
     try {
+        const { userID } = params
 
         await connectDB()
         console.log(req)
         const body = await req.json();
-        const {name, age  }: any = body;
+        const { name, age, owner }: any = body;
 
         const store = new Store({
             name: name,
-            age: age
+            age: age,
+            owner: owner
         })
-        await store.save()
-        console.log("inside api", name, age)
+        const dbRes = await store.save()
+        console.log("inside api", dbRes)
 
 
         return NextResponse.json("Success");

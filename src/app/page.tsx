@@ -1,4 +1,5 @@
 'use client'
+import { toast } from "react-hot-toast";
 import axios from 'axios'
 
 export default function Home() {
@@ -12,16 +13,18 @@ export default function Home() {
     let name='bob'
     let age=1
     axios
-      .post(`./api/1`, {
+      .post(`./api/stores/1`, {
         name: name,
         age:age,
+        owner:'1'
       })
       .then(function (response) {
         console.log(response)
+        toast.success(response.data);
         return;
       })
       .catch(function (error) {
-        // toast.error(error.response.data);
+        toast.error(error.response.data);
         console.log(error);
         return;
       });
