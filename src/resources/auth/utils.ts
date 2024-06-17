@@ -4,7 +4,7 @@ import { connectDB } from "@/resources/db/mongodb"
 
 export function saltAndHashPassword(password: string) {
   console.log("saltAndHashPassword, not yet implemented")
-  return "string"
+  return password
 }
 
 export async function getUserFromDb(email: string, pwHash: string):Promise<any> {
