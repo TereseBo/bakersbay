@@ -4,6 +4,7 @@ import { ZodError } from "zod"
 
 import { authenticateUser } from "@/resources/auth/utils"
 import { signInSchema } from "@/resources/validation/signinschema"
+
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
     Credentials({
@@ -14,9 +15,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         password: {},
       },
       authorize: async (credentials) => {
-        console.log('credentials inaurh')
-        console.log(credentials)
-
 
         const { email, password } = await signInSchema.parseAsync(credentials)
         // logic to verify if user exists
@@ -35,7 +33,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
     }),
   ],
-  
+
   session: {
     strategy: "jwt",
     maxAge: 60 * 60,
@@ -43,10 +41,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
   secret: process.env.AUTH_SECRET,
   pages: {
-    signIn: "/signin",
+    signIn: "/auth/signin",
   },
   callbacks: {
-    async signIn({ user, account, profile, email, credentials }) {
+    async signIn({ user, account, profile, email, credentials}) {
       return true
     },
     async redirect({ url, baseUrl }) {
@@ -55,7 +53,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     async session({ session, user, token }) {
       return session
     },
-    async jwt({ token, user, account, profile, isNewUser }) {
+    async jwt({ token, user, account, profile }) {
       return token
     }
   },
