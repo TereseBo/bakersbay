@@ -20,12 +20,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
         const { email, password } = await signInSchema.parseAsync(credentials)
         // logic to verify if user exists
-        console.log('email, pass after await signin schema')
-        console.log(email, password)
         const user = await authenticateUser(email, password)
-        console.log('after authenticate')
-        console.log(user)
-
 
         if (!user) {
           // No user found, so this is their first attempt to login
@@ -40,6 +35,31 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
     }),
   ],
+  
+  session: {
+    strategy: "jwt",
+    maxAge: 60 * 60,
+  },
+
+  secret: process.env.AUTH_SECRET,
+  pages: {
+    signIn: "/signin",
+  },
+  callbacks: {
+    async signIn({ user, account, profile, email, credentials }) {
+      return true
+    },
+    async redirect({ url, baseUrl }) {
+      return baseUrl
+    },
+    async session({ session, user, token }) {
+      return session
+    },
+    async jwt({ token, user, account, profile, isNewUser }) {
+      return token
+    }
+  },
 })
+
 
 export { auth as middleware } from "@/auth"
